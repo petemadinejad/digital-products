@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from base.models import BaseModel
 
+
 class Product(BaseModel):
     title = models.CharField(verbose_name=_('Title'), max_length=50)
     description = models.TextField(verbose_name=_('Description'), blank=True)

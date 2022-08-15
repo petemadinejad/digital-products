@@ -11,7 +11,7 @@ class Product(BaseModel):
     categories = models.ManyToManyField('Category', verbose_name=_('Categories'), blank=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Category(BaseModel):
@@ -38,7 +38,7 @@ class File(BaseModel):
     is_enable = models.BooleanField(verbose_name=_('Is enable'), default=True)
 
     def __str__(self):
-        return self.name
+        return self.title
 
     class Meta:
         db_table = 'file'

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category,File
+from .models import Product, Category, File
 
 
 @admin.register(Category)
@@ -22,3 +22,10 @@ class ProductAdmin(admin.ModelAdmin):
     filter_horizontal = ["categories"]
     search_fields = ["title"]
     inlines = [FileInlineAdmin]
+
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    list_display = ["title", "is_enable",'product', "created_at"]
+    list_filter = ["is_enable"]
+    search_fields = ["title"]

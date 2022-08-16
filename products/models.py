@@ -32,7 +32,7 @@ class Category(BaseModel):
 
 
 class File(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('Product'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('Product'), related_name="files")
     title = models.CharField(verbose_name=_('Title'), max_length=50)
     file = models.FileField(verbose_name=_('File'), upload_to='file/%Y/%m/%d/')
     is_enable = models.BooleanField(verbose_name=_('Is enable'), default=True)

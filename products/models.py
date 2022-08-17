@@ -32,6 +32,16 @@ class Category(BaseModel):
 
 
 class File(BaseModel):
+    FILE_AUDIO = '1'
+    FILE_VIDEO = '2'
+    FILE_PDF = '3'
+    FILE_TYPES = (
+        (FILE_AUDIO, _('audio')),
+        (FILE_VIDEO, _('video')),
+        (FILE_PDF, _('pdf')),
+    )
+    file_type = models.PositiveSmallIntegerField(verbose_name=_('File type'), choices=FILE_TYPES, default=FILE_AUDIO,
+                                                 blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('Product'), related_name="files")
     title = models.CharField(verbose_name=_('Title'), max_length=50)
     file = models.FileField(verbose_name=_('File'), upload_to='file/%Y/%m/%d/')

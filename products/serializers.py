@@ -26,3 +26,20 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_id(self, object):
         return object.id
+
+
+class FileSerializer(serializers.ModelSerializer):
+    file_type = serializers.SerializerMethodField()
+
+    class Meta:
+        model = File
+        fields = '__all__'
+
+    def get_file_type(self, object):
+        return object.get_file_type_display()
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'

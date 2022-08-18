@@ -46,3 +46,6 @@ class DeviceAdmin(admin.ModelAdmin):
 class ProvinceAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     ordering = ('name',)
+
+
+admin.site.unregister(Group)

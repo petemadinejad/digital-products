@@ -53,7 +53,8 @@ class User(AbstractUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=100, blank=True)
     nick_name = models.CharField(_('nick name'), max_length=100, blank=True)
-    phone_number = models.BigIntegerField(_('phone number'), blank=True, unique=True, null=True,
+    phone_number = models.BigIntegerField(_('phone number'), blank=True, unique=True,
+                                          validators=[validators.phone_number_validator],
                                           error_messages={'invalid': _(exceptions.phone_number_invalid_error)})
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_(help_text.is_staff_help_text))
     is_active = models.BooleanField(_('active'), default=True, help_text=_(help_text.is_active_help_text))

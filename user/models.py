@@ -1,7 +1,11 @@
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager, send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+
 from .utils import exceptions, help_text, validators
+from base.models import BaseModel
+
 
 
 class UserManager(BaseUserManager):
@@ -16,7 +20,7 @@ class UserManager(BaseUserManager):
             raise ValueError('The given username must be set')
         email = self.normalize_email(email)
         user = self.model(phone_number=phone_number, username=username, email=email, is_staff=is_staff, is_active=True,
-                          is_superuser=is_superuser, date_joined=now, **extrafields)
+                          is_superuser=is_superuser, date_joined=now, **extra_fields)
         if not extra_fields.get('no_password'):
             user.set_password(password)
         user.save(using=self._db)
@@ -38,22 +42,22 @@ class UserManager(BaseUserManager):
         return self._create_user(username, phone_number, email, password, True, True, **extra_fields)
 
 
-class User(AbstractUser, PermissionMixin):
+class User(AbstractUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with admin-compliant permissions.
     Username and password and email is required. other fields are optional.
     """
     username = models.CharField(_('username'), max_length=32, unique=True, blank=True,
                                 help_text=_(help_text.username_help_text), validators=[validators.username_validator],
-                                error_messages={'unique': _(exceptions.username_unique_error)})
+                                error_messages={'unique': _(exceptions.unique_username_error)})
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=100, blank=True)
     nick_name = models.CharField(_('nick name'), max_length=100, blank=True)
-    phone_number = models.BigIntegerField(_('phone number'), max_length=20, blank=True, unique=True, null=True,
-                                          validators=[validators.phone_number_validator],
+    phone_number = models.BigIntegerField(_('phone number'), blank=True, unique=True, null=True,
                                           error_messages={'invalid': _(exceptions.phone_number_invalid_error)})
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_(help_text.is_staff_help_text))
     is_active = models.BooleanField(_('active'), default=True, help_text=_(help_text.is_active_help_text))
+    is_superuser = models.BooleanField(_('superuser'), default=True, help_text=_(help_text.is_superuser_help_text))
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     last_seen = models.DateTimeField(_('last seen date'), auto_now=True)
 

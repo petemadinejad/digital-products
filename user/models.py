@@ -1,3 +1,5 @@
+import random
+import string
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager, send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -5,7 +7,6 @@ from django.utils import timezone
 
 from .utils import exceptions, help_text, validators
 from base.models import BaseModel
-
 
 
 class UserManager(BaseUserManager):
@@ -33,7 +34,7 @@ class UserManager(BaseUserManager):
             if phone_number:
                 username = random.choice(string.ascii_letters) + ''.join(
                     random.choice(string.digits) for _ in range(10))
-            while user.objects.filter(username=username).exists():
+            while User.objects.filter(username=username).exists():
                 username = random.choice(string.ascii_letters) + ''.join(
                     random.choice(string.digits) for _ in range(10))
         return self._create_user(username, phone_number, email, password, False, False, **extra_fields)
@@ -47,7 +48,7 @@ class User(AbstractUser, PermissionsMixin):
     An abstract base class implementing a fully featured User model with admin-compliant permissions.
     Username and password and email is required. other fields are optional.
     """
-    username = models.CharField(_('username'), max_length=32, unique=True, blank=True,
+    username = models.CharField(_('username'), max_length=32, unique=True,
                                 help_text=_(help_text.username_help_text), validators=[validators.username_validator],
                                 error_messages={'unique': _(exceptions.unique_username_error)})
     first_name = models.CharField(_('first name'), max_length=30, blank=True)

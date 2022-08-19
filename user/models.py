@@ -5,7 +5,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from utils import *
+from utils.help_text import *
+from utils.validators import *
+from utils.exceptions import *
 from base.models import BaseModel
 
 
@@ -49,17 +51,17 @@ class User(AbstractUser, PermissionsMixin):
     Username and password and email is required. other fields are optional.
     """
     username = models.CharField(_('username'), max_length=32, unique=True,
-                                help_text=_(help_text.username_help_text), validators=[validators.username_validator],
-                                error_messages={'unique': _(exceptions.unique_username_error)})
+                                help_text=_(username_help_text), validators=[username_validators],
+                                error_messages={'unique': _(unique_username_error)})
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=100, blank=True)
     nick_name = models.CharField(_('nick name'), max_length=100, blank=True)
     phone_number = models.BigIntegerField(_('phone number'), blank=True, unique=True,
-                                          validators=[validators.phone_number_validator],
-                                          error_messages={'invalid': _(exceptions.phone_number_invalid_error)})
-    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_(help_text.is_staff_help_text))
-    is_active = models.BooleanField(_('active'), default=True, help_text=_(help_text.is_active_help_text))
-    is_superuser = models.BooleanField(_('superuser'), default=True, help_text=_(help_text.is_superuser_help_text))
+                                          validators=[phone_number_validator],
+                                          error_messages={'invalid': _(phone_number_invalid_error)})
+    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_(is_staff_help_text))
+    is_active = models.BooleanField(_('active'), default=True, help_text=_(is_active_help_text))
+    is_superuser = models.BooleanField(_('superuser'), default=True, help_text=_(is_superuser_help_text))
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     last_seen = models.DateTimeField(_('last seen date'), auto_now=True)
 
@@ -94,7 +96,7 @@ class UserProfile(BaseModel):
     nick_name = models.CharField(_('nick name'), max_length=32, blank=True)
     avatar = models.ImageField(_('avatar'), upload_to='avatar/%Y/%m', blank=True)
     birthday = models.DateField(_('birthday'), blank=True, null=True)
-    gender = models.BooleanField(_('gender'), default=True, help_text=help_text.gender_help_text)
+    gender = models.BooleanField(_('gender'), default=True, help_text=gender_help_text)
     province = models.ForeignKey(verbose_name=_('province'), to='Province', on_delete=models.CASCADE, blank=True,
                                  null=True)
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Gateway(models.Model):
@@ -27,14 +28,14 @@ class Payment(models.Model):
         STATUS_CANCELED: _('Payment canceled by user'),
         STATUS_REFUNDED: _('This Payment has been refunded'),
     }
-    user = models.ForeignKey(verbose_name=_('user'), to=User, on_delete=models.CASCADE, related_name='payments')
-    package = models.ForeignKey(verbose_name=_('package'), to=Package, on_delete=models.CASCADE)
+    user = models.ForeignKey(verbose_name=_('user'), to='user.User', on_delete=models.CASCADE, related_name='payments')
+    package = models.ForeignKey(verbose_name=_('package'), to='subscriptions.Package', on_delete=models.CASCADE)
     gateway = models.ForeignKey(verbose_name=_('gateway'), to=Gateway, on_delete=models.CASCADE)
-    price = models.DecimalField(_('price'), )
+    price = models.PositiveIntegerField(_('price'),default=0)
     status = models.PositiveSmallIntegerField(_('status'), choices=STATUS_CHOICES, default=STATUS_VOID)
     device_uuid = models.CharField(_('device uuid'), max_length=50, blank=True)
     phone_number = models.CharField(_('phone number'), max_length=50, blank=True)
-    discount = models.DecimalField(_('discount'), blank=True, null=True)
+    consumed_code = models.PositiveIntegerField(_('consumed reference code'), blank=True, null=True)
 
     class Meta:
         db_table = 'payment'

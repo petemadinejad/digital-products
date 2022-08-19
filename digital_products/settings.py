@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'user.apps.UserConfig',
     'products.apps.ProductsConfig',
+    'payments.apps.PaymentsConfig',
+    'subscriptions.apps.SubscriptionsConfig',
 
     'rest_framework',
 

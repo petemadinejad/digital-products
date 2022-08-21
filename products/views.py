@@ -1,13 +1,14 @@
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
 from .models import Product, Category, File
 from .serializers import CategorySerializer, FileSerializer, ProductSerializer
 
 
 class ProductListView(APIView):
-
 
     def get(self, request):
         products = Product.objects.all()
@@ -16,8 +17,12 @@ class ProductListView(APIView):
 
 
 class ProductDetailView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated,]
+
     def get(self, request, pk):
+        subs = request.user.subscription_set.filter(expire_time__gt=timezone.now())
+        if not subs.exists():
+            return Response(status=status.HTTP_403_FORBIDDEN)
         try:
             product = Product.objects.get(pk=pk)
         except Product.DoesNotExist:

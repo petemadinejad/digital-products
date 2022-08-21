@@ -1,5 +1,6 @@
 import random
 import string
+
 from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager, send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _

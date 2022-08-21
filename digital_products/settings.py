@@ -1,11 +1,16 @@
 import os
+import environ
 from datetime import timedelta
 from pathlib import Path
 from .local_settings import *
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-_7gb#dww#v^1euv6$^2k5ux9-nl*l@sl@i5ex+7$k@ncdoij%r'
+SECRET_KEY = env('SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,6 +27,7 @@ INSTALLED_APPS = [
     'subscriptions.apps.SubscriptionsConfig',
 
     'rest_framework',
+    'import_export',
 
     'rest_framework_simplejwt',
 ]
@@ -94,6 +100,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # auth
@@ -103,7 +111,6 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-
 
 # SIMPLE_JWT = {
 #     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -143,3 +150,5 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+

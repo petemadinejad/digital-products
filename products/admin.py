@@ -1,6 +1,8 @@
-from django.contrib import admin
-from .models import Product, Category, File
+from import_export.admin import ImportExportModelAdmin
 
+from django.contrib import admin
+
+from .models import Product, Category, File
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -16,7 +18,7 @@ class FileInlineAdmin(admin.StackedInline):
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ["title", "is_enable", "created_at"]
     list_filter = ["is_enable"]
     filter_horizontal = ["categories"]
